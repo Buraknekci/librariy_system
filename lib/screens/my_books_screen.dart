@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import '../models/book.dart';
 import '../services/library_service.dart';
 import 'book_details_screen.dart';
+import 'reader_screen.dart';
 
 class MyBooksScreen extends StatelessWidget {
   const MyBooksScreen({super.key});
@@ -43,13 +44,6 @@ class MyBooksScreen extends StatelessWidget {
                         'No books borrowed yet',
                         style: TextStyle(fontSize: 18, color: Colors.grey.shade600, fontWeight: FontWeight.w500),
                       ),
-                      const SizedBox(height: 8),
-                      TextButton(
-                        onPressed: () {
-                          // Ideally switch to search tab
-                        },
-                        child: const Text('Go to Search'),
-                      ),
                     ],
                   ),
                 );
@@ -69,21 +63,20 @@ class MyBooksScreen extends StatelessWidget {
                       borderRadius: BorderRadius.circular(16),
                       side: BorderSide(color: Colors.grey.shade200),
                     ),
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(16),
-                      onTap: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => BookDetailsScreen(book: book),
-                          ),
-                        );
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.all(12),
-                        child: Row(
-                          children: [
-                            Hero(
+                    child: Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: Row(
+                        children: [
+                          GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => BookDetailsScreen(book: book),
+                                ),
+                              );
+                            },
+                            child: Hero(
                               tag: 'book-${book.id}',
                               child: ClipRRect(
                                 borderRadius: BorderRadius.circular(8),
@@ -97,52 +90,52 @@ class MyBooksScreen extends StatelessWidget {
                                 ),
                               ),
                             ),
-                            const SizedBox(width: 16),
-                            Expanded(
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    book.title,
-                                    style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
+                          const SizedBox(width: 16),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  book.title,
+                                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+                                ),
+                                Text(
+                                  book.author,
+                                  style: TextStyle(color: Colors.grey.shade600, fontSize: 14),
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  'Due: ${book.dueDate != null ? formatter.format(book.dueDate!) : 'N/A'}',
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: isOverdue ? Colors.red : Colors.blue.shade700,
+                                    fontWeight: FontWeight.bold,
                                   ),
-                                  Text(
-                                    book.author,
-                                    style: TextStyle(color: Colors.grey.shade600, fontSize: 14),
+                                ),
+                                const SizedBox(height: 8),
+                                ElevatedButton.icon(
+                                  onPressed: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ReaderScreen(book: book),
+                                      ),
+                                    );
+                                  },
+                                  icon: const Icon(Icons.menu_book, size: 18),
+                                  label: const Text('READ'),
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: Colors.blue,
+                                    foregroundColor: Colors.white,
+                                    visualDensity: VisualDensity.compact,
+                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
                                   ),
-                                  const SizedBox(height: 12),
-                                  Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                                    decoration: BoxDecoration(
-                                      color: isOverdue ? Colors.red.shade50 : Colors.blue.shade50,
-                                      borderRadius: BorderRadius.circular(8),
-                                    ),
-                                    child: Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        Icon(
-                                          isOverdue ? Icons.warning_amber : Icons.timer_outlined,
-                                          size: 14,
-                                          color: isOverdue ? Colors.red : Colors.blue.shade700,
-                                        ),
-                                        const SizedBox(width: 4),
-                                        Text(
-                                          'Due: ${book.dueDate != null ? formatter.format(book.dueDate!) : 'N/A'}',
-                                          style: TextStyle(
-                                            fontSize: 12,
-                                            fontWeight: FontWeight.bold,
-                                            color: isOverdue ? Colors.red : Colors.blue.shade700,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
+                                ),
+                              ],
                             ),
-                            const Icon(Icons.chevron_right, color: Colors.grey),
-                          ],
-                        ),
+                          ),
+                        ],
                       ),
                     ),
                   );

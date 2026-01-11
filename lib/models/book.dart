@@ -8,6 +8,7 @@ class Book {
   bool isAvailable;
   DateTime? borrowDate;
   DateTime? dueDate;
+  final List<String> content;
 
   Book({
     required this.id,
@@ -19,5 +20,6 @@ class Book {
     this.isAvailable = true,
     this.borrowDate,
     this.dueDate,
+    this.content = const [],
   });
 }
